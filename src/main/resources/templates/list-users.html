@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -385,6 +385,8 @@
                                         <input type="email" pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" required
                                                th:field="*{email}"
                                                class="form-control mb-4 col-4" placeholder="email">
+                                        <p style="color: red" th:if="${#fields.hasErrors('email')}"
+                                           th:errors="*{email}"> email error</p>
 
                                         <input type="password" required th:field="*{password}"
                                                class="form-control mb-4 col-4" placeholder="password">
@@ -451,6 +453,55 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Отображение модального окна
+    function showModal() {
+        var modal = document.getElementById("exampleModal");
+        modal.style.display = "block";
+    }
+
+    // Закрытие модального окна при нажатии на кнопку "Close"
+    var closeButton = document.querySelector("#exampleModal .close");
+    closeButton.addEventListener("click", function() {
+        var modal = document.getElementById("exampleModal");
+        modal.style.display = "none";
+    });
+
+    // Закрытие модального окна при нажатии вне окна
+    window.addEventListener("click", function(event) {
+        var modal = document.getElementById("exampleModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+    let showModaltip = false;
+    if (showModaltip) {
+        // Вызываем функцию showModal()
+        showModal();
+    }
+</script>
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -460,6 +511,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<!--<script type="text/javascript" th:src="@{/js/test.js}"></script> -->
+
 </body>
 </html>
