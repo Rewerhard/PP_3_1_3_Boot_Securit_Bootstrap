@@ -50,7 +50,7 @@
 			text-transform: uppercase;
 			position: absolute;
 			left: 50%;
-			top: 50%;
+			top: 0px;
 			-webkit-transform: translate(-50%, -50%);
 			-ms-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
@@ -63,11 +63,26 @@
 			text-transform: uppercase;
 			color: #211b19;
 			background: #fff;
-			padding: 10px 5px;
+			padding: 5px 5px;
 			margin: auto;
 			display: inline-block;
 			position: absolute;
-			bottom: 0px;
+			top: 50%;
+			left: 0;
+			right: 0;
+		}
+		.notfound .notfound-404 h3 {
+			font-family: 'Montserrat', sans-serif;
+			font-size: 28px;
+			font-weight: 400;
+			text-transform: uppercase;
+			color: #211b19;
+			/*background: #fff;*/
+			padding: 5px 5px;
+			margin: auto;
+			display: inline-block;
+			position: absolute;
+			top: 80%;
 			left: 0;
 			right: 0;
 		}
@@ -100,6 +115,7 @@
 		<div class="notfound-404">
 			<h1>Oops!</h1>
 			<h2>Этот @email уже занят </h2>
+			<h3 th:text = "${name}  + ${message}"></h3>
 		</div>
 		<a th:href="@{/admin/list}">Go TO Homepage</a>
 	</div>

@@ -3,10 +3,9 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -33,6 +32,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(User user) {
+        String encode = user.getPassword();
+        if (user.getId() == null) {
+            passwordChanged(user, encode);
+        } else {
+            if (encode.isEmpty()) { //  password not changed
+                user.setPassword(getUserById(user.getId()).getPassword());
+            } else {
+                passwordChanged(user, encode);
+            }
+        }
         userRepository.save(user);
     }
 

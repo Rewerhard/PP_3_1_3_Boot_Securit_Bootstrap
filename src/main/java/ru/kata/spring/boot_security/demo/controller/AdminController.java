@@ -2,19 +2,20 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import javax.validation.Valid;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -25,6 +26,7 @@ public class AdminController {
     private final RoleService roleService;
 
 
+
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
@@ -32,7 +34,10 @@ public class AdminController {
     }
 
     @GetMapping("/list")
-    public String showUserList(Model model, Authentication authentication) {
+    public String showUserList(Model model, Authentication authentication,
+                               @RequestParam(required = false) Boolean showModaltip,
+                               @RequestParam(required = false) String name,
+                               @RequestParam(required = false) String message) {
         User user = new User();
         String email = authentication.getName();
         User editUser = userService.findUserByEmail(email);
@@ -43,21 +48,14 @@ public class AdminController {
         model.addAttribute("edit_roles", roleString);
         model.addAttribute("users", userService.getUsers());
         model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("showModaltip", showModaltip);
+        model.addAttribute("name", name);
+        model.addAttribute("message", message);
         return "list-users";
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        String encode = user.getPassword();
-        if (user.getId() == null) {
-            userService.passwordChanged(user, encode);
-        } else {
-            if (encode.isEmpty()) { //  password not changed
-                user.setPassword(userService.getUserById(user.getId()).getPassword());
-            } else {
-                userService.passwordChanged(user, encode);
-            }
-        }
+    public String saveUser(@ModelAttribute("user") @Valid User user) {
         userService.add(user);
         return "redirect:/admin/list";
     }
@@ -65,6 +63,11 @@ public class AdminController {
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("userId") Long id) {
         userService.deleteUserById(id);
+        return "redirect:/admin/list";
+    }
+    @PostMapping("/resetShowModaltip")
+    public String resetShowModaltip (Model model){
+        model.addAttribute("showModaltip", false);
         return "redirect:/admin/list";
     }
 }

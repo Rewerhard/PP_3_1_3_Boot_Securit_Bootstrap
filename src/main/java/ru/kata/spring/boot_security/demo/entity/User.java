@@ -15,6 +15,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,14 +31,21 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+    @NotBlank(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 30, message = "От 2 до 30 символов")
     @Column(name = "user_name")
     private String name;
+    @NotBlank(message = "Поле не может быть пустым")
+    @Size(min = 2, max = 30, message = "От 2 до 30 символов")
     @Column(name = "user_last_name")
     private String lastName;
+    @Min(value = 0, message = "Поле не может быть меньше 0")
     @Column(name = "user_age")
     private int age;
+    @Email
     @Column(name = "user_email")
     private String email;
+    @NotBlank(message = "Password не может быть пустым")
     @Column(name = "user_password")
     private String password;
     @ManyToMany
